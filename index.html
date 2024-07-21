@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editing Page</title>
+    <style>
+        
+
+.buttons button {
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 16px;
+    cursor: pointer;
+  background-color: #a961b7;
+   border-radius: 100px; 
+    resize: none;
+}
+
+.buttons button:hover {
+    background-color: #ab5268;
+}
+
+.buttons button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.buttons button.enabled {
+    background-color: #28a745;
+}
+
+.buttons button.enabled:hover {
+    background-color: #218838;
+}
+
+.buttons button.disabled {
+    background-color: #dc3545;
+    cursor: not-allowed;
+}
+
+.buttons button.disabled:hover {
+    background-color: #c82333;
+}
+
+#undo:disabled, #redo:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.editor-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.editor {
+    position: relative;
+    width: 600px;
+    height: 400px;
+    border: 1px solid #ccc;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.text-element {
+    position: absolute;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    cursor: text;
+    font-size: 16px;
+    min-width: 50px;
+    text-align: center;
+    top: 20px; /* Adjust as necessary to center vertically */
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.text-element {
+    position: absolute;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    cursor: text;
+    font-size: 16px;
+    min-width: 50px;
+    text-align: center;
+}
+
+.panel {
+    position: absolute;
+    /* left: 0; */
+    right: 0; /* Highlighted change to move the panel to the right side */
+    top: 0;
+    width: 200px;
+    height: 100%;
+    background-color: #fff;
+    border-left: 1px solid #ccc; /* Change border side */
+    padding: 10px;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1); /* Change shadow direction */
+    display: none; /* Hide the panel initially */
+}
+    </style>
+</head>
+<body>
+    <body>
+  <h1><center>Editing Page</center></h1>
+     
+        <div class="buttons">
+            <button id="undo">Undo</button>
+            <button id="redo">Redo</button>
+        </div>
+  <div class="editor-container" id="editor-container">
+        <div class="editor" id="editor">
+            </div>
+        <div class="panel" id="panel">
+            <h3>Edit Text</h3>
+            <label for="textContent">Text:</label>
+            <input type="text" id="textContent">
+            <br>
+            <label for="fontSize">Font Size:</label>
+            <input type="number" id="fontSize" min="10" max="100">
+            <br>
+            <label for="fontColor">Font Color:</label>
+            <input type="color" id="fontColor">
+            <br>
+            <label for="fontFamily">Font Family:</label>
+            <select id="fontFamily">
+                <option value="Arial">Arial</option>
+                <option value="Verdana">Verdana</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Courier New">Courier New</option>
+            </select>
+        </div>
+        </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+    const editorContainer = document.getElementById('editor-container');
+    const editor = document.getElementById('editor');
+    let newTextElement = null;
+
+    editorContainer.addEventListener('click', function (event) {
+        if (event.target === editorContainer || event.target === editor) {
+            if (!newTextElement) {
+                addNewTextElement();
+            } else {
+                newTextElement.focus();
+            }
+        }
+    });
+
+    function addNewTextElement() {
+        newTextElement = document.createElement('div');
+        newTextElement.contentEditable = true;
+        newTextElement.className = 'text-element';
+        newTextElement.innerText = 'New Text';
+        editor.appendChild(newTextElement);
+
+        // Place the new text element at the top center of the editor
+        const editorRect = editor.getBoundingClientRect();
+        const textRect = newTextElement.getBoundingClientRect();
+        newTextElement.style.left = `${(editorRect.width - textRect.width) / 2}px`;
+        newTextElement.style.top = '20px'; // Adjust as necessary to center vertically
+
+        newTextElement.focus();
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const editorContainer = document.getElementById('editor-container');
+    const editor = document.getElementById('editor');
+    const panel = document.getElementById('panel');
+    const textContentInput = document.getElementById('textContent');
+    const fontSizeInput = document.getElementById('fontSize');
+    const fontColorInput = document.getElementById('fontColor');
+    const fontFamilySelect = document.getElementById('fontFamily');
+    let newTextElement = null;
+
+    editorContainer.addEventListener('click', function (event) {
+        if (event.target === editorContainer || event.target === editor) {
+            if (!newTextElement) {
+                addNewTextElement();
+            } else {
+                newTextElement.focus();
+            }
+        }
+    });
+
+    function addNewTextElement() {
+        newTextElement = document.createElement('div');
+        newTextElement.contentEditable = true;
+        newTextElement.className = 'text-element';
+        newTextElement.innerText = 'New Text';
+        editor.appendChild(newTextElement);
+
+        // Place the new text element at the top center of the editor
+        const editorRect = editor.getBoundingClientRect();
+        const textRect = newTextElement.getBoundingClientRect();
+        newTextElement.style.left = `${(editorRect.width - textRect.width) / 2}px`;
+        newTextElement.style.top = '20px'; // Adjust as necessary to center vertically
+
+        newTextElement.focus();
+        showPanel();
+    }
+
+    function showPanel() {
+        panel.style.display = 'block';
+
+        // Update panel inputs with current text element styles and content
+        textContentInput.value = newTextElement.innerText;
+        fontSizeInput.value = parseInt(window.getComputedStyle(newTextElement).fontSize);
+        fontColorInput.value = rgbToHex(window.getComputedStyle(newTextElement).color);
+        fontFamilySelect.value = window.getComputedStyle(newTextElement).fontFamily.replace(/["']/g, "");
+
+        textContentInput.addEventListener('input', updateTextElement);
+        fontSizeInput.addEventListener('input', updateTextElement);
+        fontColorInput.addEventListener('input', updateTextElement);
+        fontFamilySelect.addEventListener('input', updateTextElement);
+    }
+
+    function updateTextElement() {
+        newTextElement.innerText = textContentInput.value;
+        newTextElement.style.fontSize = `${fontSizeInput.value}px`;
+        newTextElement.style.color = fontColorInput.value;
+        newTextElement.style.fontFamily = fontFamilySelect.value;
+    }
+
+    function rgbToHex(rgb) {
+        let rgbArray = rgb.match(/\d+/g);
+        return `#${((1 << 24) + (parseInt(rgbArray[0]) << 16) + (parseInt(rgbArray[1]) << 8) + parseInt(rgbArray[2])).toString(16).slice(1).toUpperCase()}`;
+    }
+});
+
+
+
+    </script>
+</body>
+</html>
